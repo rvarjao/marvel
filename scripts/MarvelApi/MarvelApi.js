@@ -3,7 +3,11 @@ class MarvelApi {
     baseEndPoint = "http://gateway.marvel.com";
     apikey = "9103478f064393d0abbd1e1da6ce0f5f";
     ts = 1;
-    hash ='5ad4f5fc8927ac53a2003834cc81375a';
+    hash = '5ad4f5fc8927ac53a2003834cc81375a';
+    list = {
+        limit: 20,
+        offset: 0
+    };
 
     characters = {
         get: (id) => {
@@ -16,16 +20,17 @@ class MarvelApi {
                 });
         },
         list: (options = {}) => {
-            const limit = options.limit || 20;
-            const offset = options.offset || 0;
+            this.limit = options.limit || this.list.limit || 20;
+            this.offset = options.offset || this.list.offset || 0;
 
             const params = new URLSearchParams({
                 apikey: this.apikey,
-                limit: limit,
-                offset: offset,
+                limit: this.limit,
+                offset: this.offset,
                 ts: this.ts,
                 hash: this.hash,
             });
+
             const endpoint = `${this.baseEndPoint}/v1/public/characters?${params.toString()}`;
             return fetch(endpoint, params)
                 .then(response => response.json())

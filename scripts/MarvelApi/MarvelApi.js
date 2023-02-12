@@ -10,23 +10,31 @@ class MarvelApi {
     };
 
     characters = {
-        get: (id) => {
-            const endpoint = `${this.baseEndPoint}/v1/public/characters/${id}?apikey=${this.apikey}`;
+        get: (characterId) => {
+            const params = new URLSearchParams({
+                apikey: this.apikey,
+                limit: this.list.limit,
+                offset: this.list.offset,
+                ts: this.ts,
+                hash: this.hash,
+                characterId: characterId
+            });
+
+            const endpoint = `${this.baseEndPoint}/v1/public/characters/${characterId}?${params.toString()}`;
             return fetch(endpoint)
                 .then(response => response.json())
-                .then(data => console.log(data))
+                .then(data => data)
                 .catch(error => {
                     console.error(error);
                 });
         },
         list: (options = {}) => {
-            this.limit = options.limit || this.list.limit || 20;
-            this.offset = options.offset || this.list.offset || 0;
-
+            this.list.limit = options.limit ?? this.list.limit ?? 20;
+            this.list.offset = options.offset ?? this.list.offset ?? 0;
             const params = new URLSearchParams({
                 apikey: this.apikey,
-                limit: this.limit,
-                offset: this.offset,
+                limit: this.list.limit,
+                offset: this.list.offset,
                 ts: this.ts,
                 hash: this.hash,
             });
@@ -34,12 +42,63 @@ class MarvelApi {
             const endpoint = `${this.baseEndPoint}/v1/public/characters?${params.toString()}`;
             return fetch(endpoint, params)
                 .then(response => response.json())
-                .then(data => {
-                    return data
-                })
+                .then(data => data)
                 .catch(error => {
                     console.error(error);
                 });
         },
-    }
+        comics: (characterId) => {
+            const params = new URLSearchParams({
+                apikey: this.apikey,
+                ts: this.ts,
+                hash: this.hash,
+                characterId: characterId
+            });
+
+            const endpoint = `${this.baseEndPoint}/v1/public/characters/${characterId}/comics?${params.toString()}`;
+            return fetch(endpoint)
+                .then(response => response.json())
+                .then(data => data)
+                .catch(error => {
+                    console.error(error);
+                });
+        },
+    };
+
+    comics = {
+        get: (comicId) => {
+            const params = new URLSearchParams({
+                apikey: this.apikey,
+                ts: this.ts,
+                hash: this.hash,
+                comicId: comicId
+            });
+
+            const endpoint = `${this.baseEndPoint}/v1/public/comics/${comicId}?${params.toString()}`;
+            return fetch(endpoint)
+                .then(data => data)
+                .catch(error => {
+                    console.error(error);
+                });
+        }
+    };
+
+    resources = {
+        get: (resourceURI) => {
+            const params = new URLSearchParams({
+                apikey: this.apikey,
+                ts: this.ts,
+                hash: this.hash,
+            });
+
+            const endpoint = `${resourceURI}?${params.toString()}`;
+            return fetch(endpoint)
+                .then(response => response.json())
+                .then(data => data)
+                .catch(error => {
+                    console.error(error);
+                });
+        }
+    };
+
 }

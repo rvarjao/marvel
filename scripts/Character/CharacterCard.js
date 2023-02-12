@@ -14,7 +14,7 @@ class CharacterCard {
         header.appendChild(image);
 
         const link = document.createElement("a");
-        link.href = "#";
+        link.href = `./pages/character.html?id=${this.character.id}`;
         link.textContent = this.character.name;
 
         const footer = document.createElement("footer");

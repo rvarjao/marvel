@@ -1,0 +1,7 @@
+article > header {
+    text-align: center;
+}
+
+article > header > img {
+    height: 5rem;
+}

@@ -63,6 +63,22 @@ class MarvelApi {
                     console.error(error);
                 });
         },
+        events: (characterId) => {
+            const params = new URLSearchParams({
+                apikey: this.apikey,
+                ts: this.ts,
+                hash: this.hash,
+                characterId: characterId
+            });
+
+            const endpoint = `${this.baseEndPoint}/v1/public/characters/${characterId}/events?${params.toString()}`;
+            return fetch(endpoint)
+                .then(response => response.json())
+                .then(data => data)
+                .catch(error => {
+                    console.error(error);
+                });
+        }
     };
 
     comics = {
